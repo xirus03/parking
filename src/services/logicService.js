@@ -22,14 +22,14 @@ exports.caculate = (vehicle) => {
 
   const days = Math.floor(hours / 24);
   const exceedRate = days * 5000;
-  return flatRate + rate * (hours % 24) + exceedRate;
+  return flatRate + (rate * (hours % 24) - 3) + exceedRate;
 };
 
 const getDuration = (timeEntry, timeExit) => {
   const startTime = moment(timeExit);
   const exitTime = moment(timeEntry);
 
-  startTime.add(24, "hours");
+  // startTime.add(24, "hours");
 
   const duration = startTime.diff(exitTime, "minutes");
   return duration;
