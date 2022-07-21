@@ -8,7 +8,7 @@ exports.index = async (req, res) => {
     const vehicles = await Vehicle.find();
     res.json(vehicles);
   } catch (err) {
-    res.json(500, { message: err.message });
+    res.json({ message: err.message });
   }
 };
 
@@ -20,22 +20,32 @@ exports.get = async (req, res) => {
 
     res.json(vehicle);
   } catch (err) {
-    res.json(500, { message: err.message });
+    res.json({ message: err.message });
   }
 };
 
 exports.park = async (req, res) => {
   try {
+    let skip = false;
     const spot = await Spot.findById(req.body.spotId);
 
     if (spot == null) {
+      skip = true;
       res.json({ message: "Spot not found" });
+    }
+
+    if (spot.vehicle != null) {
+      skip = true;
+      res.json({ message: "Spot is not available" });
     }
 
     // check if vehicle is available to current spot
     if (!LogicService.checkIfFit(spot.size, req.body.size)) {
+      skip = true;
       res.json({ message: "not fit" });
     }
+
+    if (skip) return;
 
     const vehicle = new Vehicle({
       plateNo: req.body.plateNo,
@@ -50,7 +60,7 @@ exports.park = async (req, res) => {
 
     res.json(newVehicle);
   } catch (err) {
-    res.json(500, { message: err.message });
+    res.status(500).json({ message: err.message });
   }
 };
 
@@ -68,8 +78,11 @@ exports.delete = async (req, res) => {
       response = { ...response, fee };
     }
 
+    vehicle.spot.vehicle = null;
+    await vehicle.spot.save();
+
     res.json(response);
   } catch (err) {
-    res.json(500, { message: err.message });
+    res.json({ message: err.message });
   }
 };

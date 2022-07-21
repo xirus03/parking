@@ -5,6 +5,7 @@ const parkingSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  spots: [{ type: mongoose.SchemaTypes.ObjectId, ref: "Spot" }],
 });
 
 module.exports = mongoose.model("Parking", parkingSchema);
