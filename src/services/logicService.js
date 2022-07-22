@@ -29,7 +29,7 @@ const getDuration = (timeEntry, timeExit) => {
   const startTime = moment(timeExit);
   const exitTime = moment(timeEntry);
 
-  startTime.add(24, "hours");
+  // startTime.add(24, "hours");
 
   const duration = startTime.diff(exitTime, "minutes");
   return duration;
