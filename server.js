@@ -16,11 +16,7 @@ const mongoose = require("mongoose");
   });
 })();
 
-app.use(
-  cors({
-    origin: "*",
-  })
-);
+app.use(cors({ origin: "*" }));
 app.use(express.json());
 
 const vehicleRouter = require("./src/routes/vehicle");
