@@ -27,7 +27,7 @@ exports.get = async (req, res) => {
 exports.park = async (req, res) => {
   try {
     let skip = false;
-    const spot = await Spot.findById(req.body.spotId);
+    const spot = await Spot.findById(req.body.spot);
 
     if (spot == null) {
       skip = true;
@@ -42,16 +42,16 @@ exports.park = async (req, res) => {
     // check if vehicle is available to current spot
     if (!LogicService.checkIfFit(spot.size, req.body.size)) {
       skip = true;
-      res.json({ message: "not fit" });
+      res.json({ message: "Vehicle will not fit." });
     }
 
-    if (skip) return;
+    if (skip == true) return;
 
     const vehicle = new Vehicle({
       plateNo: req.body.plateNo,
       size: req.body.size,
       timeEntry: Date.now(),
-      spot: ObjectId(req.body.spotId),
+      spot: ObjectId(req.body.spot),
     });
 
     const newVehicle = await vehicle.save();
@@ -74,7 +74,7 @@ exports.delete = async (req, res) => {
     response = { vehicle };
 
     if (vehicle != undefined) {
-      const fee = LogicService.caculate(vehicle);
+      const fee = LogicService.calculate(vehicle);
       response = { ...response, fee };
     }
 

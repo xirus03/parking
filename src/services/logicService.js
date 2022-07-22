@@ -10,7 +10,7 @@ exports.checkIfFit = (spotSize, vehicleSize) => {
   return sizes[spotSize].includes(vehicleSize);
 };
 
-exports.caculate = (vehicle) => {
+exports.calculate = (vehicle) => {
   if (vehicle == null) return 0;
 
   const flatRate = 40;
@@ -29,7 +29,7 @@ const getDuration = (timeEntry, timeExit) => {
   const startTime = moment(timeExit);
   const exitTime = moment(timeEntry);
 
-  // startTime.add(24, "hours");
+  startTime.add(24, "hours");
 
   const duration = startTime.diff(exitTime, "minutes");
   return duration;
